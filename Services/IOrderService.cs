@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using DeliveryAPI.Domain;
+
 namespace DeliveryAPI.Services
 {
-    public class IOrderService
+    public interface IOrderService
     {
-        public IOrderService()
-        {
-        }
+        List<Order> GetOrder();
+
+        Order GetOrderById(Guid orderId);
     }
 }
