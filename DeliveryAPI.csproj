@@ -22,5 +22,9 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Options\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Contracts\V1\" />
+    <Folder Include="Controllers\V1\" />
   </ItemGroup>
 </Project>
