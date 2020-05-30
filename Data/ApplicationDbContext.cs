@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryAPI.Data
 {
-    public class DataContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public DataContext(DbContextOptions<DataContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
