@@ -12,7 +12,13 @@ namespace DeliveryAPI.Contracts
         public static class Orders
         {
             public const string GetAll = Base + "/orders";
+
             public const string Get = Base + "/orders/{orderId}";
+
+            public const string Update = Base + "/orders/{orderId}";
+
+            public const string Delete = Base + "/orders/{orderId}";
+
             public const string Create = Base + "/orders";
         }
     }
