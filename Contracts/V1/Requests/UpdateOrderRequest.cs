@@ -3,8 +3,6 @@ namespace DeliveryAPI.Contracts.V1.Requests
 {
     public class UpdateOrderRequest
     {
-        public UpdateOrderRequest()
-        {
-        }
+        public decimal Amount { get; set; }
     }
 }
