@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DeliveryAPI.Contracts;
 using DeliveryAPI.Contracts.V1.Requests;
 using DeliveryAPI.Contracts.V1.Responses;
@@ -22,13 +23,13 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpGet(ApiRoutes.Orders.GetAll)]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_orderService.GetOrder());
+            return Ok(await _orderService.GetOrdersAsync());
         }
 
         [HttpPut(ApiRoutes.Orders.Update)]
-        public IActionResult Update([FromRoute] Guid orderId, [FromBody] UpdateOrderRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid orderId, [FromBody] UpdateOrderRequest request)
         {
             var order = new Order
             {
@@ -36,7 +37,7 @@ namespace DeliveryAPI.Controllers
                 Amount = request.Amount
             };
 
-            var updated = _orderService.UpdateOrder(order);
+            var updated = await _orderService.UpdateOrderAsync(order);
 
             if (updated) return Ok(order);
 
@@ -45,24 +46,20 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpGet(ApiRoutes.Orders.Get)]
-        public IActionResult Get([FromRoute] Guid orderId)
+        public async Task<IActionResult> Get([FromRoute] Guid orderId)
         {
-            var order = _orderService.GetOrderById(orderId);
+            var order = await _orderService.GetOrderByIdAsync(orderId);
 
             if (order == null) return NotFound();
             return Ok(order);
         }
 
         [HttpPost(ApiRoutes.Orders.Create)]
-        public IActionResult Create([FromBody] CreateOrderRequest orderRequest)
+        public async Task<IActionResult> Create([FromBody] CreateOrderRequest orderRequest)
         {
-            var order = new Order { Id = orderRequest.Id };
+            var order = new Order { Amount = orderRequest.Amount };
 
-            if (order.Id != Guid.Empty)
-                order.Id = Guid.NewGuid();
-
-            _orderService.GetOrder().Add(order);
-
+            await _orderService.CreateOrderAsync(order);
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Orders.Get.Replace("{orderId}", order.Id.ToString());
 
@@ -71,9 +68,9 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpDelete(ApiRoutes.Orders.Delete)]
-        public IActionResult Delete([FromRoute] Guid orderId)
+        public async Task<IActionResult> Delete([FromRoute] Guid orderId)
         {
-            var deleted = _orderService.DeleteOrder(orderId);
+            var deleted = await _orderService.DeleteOrderAsync(orderId);
 
             if (deleted) return NoContent();
 
