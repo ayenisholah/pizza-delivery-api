@@ -11,5 +11,7 @@ namespace DeliveryAPI.Services
         Order GetOrderById(Guid orderId);
 
         bool UpdateOrder(Order orderToUpdate);
+
+        bool DeleteOrder(Guid orderId);
     }
 }
