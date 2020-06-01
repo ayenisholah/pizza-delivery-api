@@ -27,6 +27,23 @@ namespace DeliveryAPI.Controllers
             return Ok(_orderService.GetOrder());
         }
 
+        [HttpPut(ApiRoutes.Orders.Update)]
+        public IActionResult Update([FromRoute] Guid orderId, [FromBody] UpdateOrderRequest request)
+        {
+            var order = new Order
+            {
+                Id = orderId,
+                Amount = request.Amount
+            };
+
+            var updated = _orderService.UpdateOrder(order);
+
+            if (updated) return Ok(order);
+
+            return NotFound();
+
+        }
+
         [HttpGet(ApiRoutes.Orders.Get)]
         public IActionResult Get([FromRoute] Guid orderId)
         {
