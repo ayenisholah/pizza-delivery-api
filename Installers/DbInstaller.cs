@@ -18,7 +18,9 @@ namespace DeliveryAPI.Installers
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DataContext>();
 
-            services.AddScoped<IOrderService, OrderService>();
+            //services.AddScoped<IOrderService, OrderService>();
+            services.AddSingleton<IOrderService, CosmosOrderService>();
+
         }
     }
 }
