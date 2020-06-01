@@ -9,5 +9,7 @@ namespace DeliveryAPI.Services
         List<Order> GetOrder();
 
         Order GetOrderById(Guid orderId);
+
+        bool UpdateOrder(Order orderToUpdate);
     }
 }
