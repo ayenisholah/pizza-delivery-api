@@ -33,5 +33,17 @@ namespace DeliveryAPI.Services
         {
             return _orders.SingleOrDefault(x => x.Id == orderId);
         }
+
+        public bool UpdateOrder(Order orderToUpdate)
+        {
+            var orderExists = GetOrderById(orderToUpdate.Id) != null;
+
+            if (!orderExists) return false;
+
+            var index = _orders.FindIndex(x => x.Id == orderToUpdate.Id);
+            _orders[index] = orderToUpdate;
+
+            return true;
+        }
     }
 }
