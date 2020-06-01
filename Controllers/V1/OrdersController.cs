@@ -70,5 +70,15 @@ namespace DeliveryAPI.Controllers
             return Created(locationUri, response);
         }
 
+        [HttpDelete(ApiRoutes.Orders.Delete)]
+        public IActionResult Delete([FromRoute] Guid orderId)
+        {
+            var deleted = _orderService.DeleteOrder(orderId);
+
+            if (deleted) return NoContent();
+
+            return NotFound();
+        }
+
     }
 }
