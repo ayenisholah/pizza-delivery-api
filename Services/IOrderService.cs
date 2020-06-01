@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DeliveryAPI.Domain;
 
 namespace DeliveryAPI.Services
 {
     public interface IOrderService
     {
-        List<Order> GetOrder();
+        Task<List<Order>> GetOrdersAsync();
 
-        Order GetOrderById(Guid orderId);
+        Task<bool> CreateOrderAsync(Order order);
 
-        bool UpdateOrder(Order orderToUpdate);
+        Task<Order> GetOrderByIdAsync(Guid orderId);
 
-        bool DeleteOrder(Guid orderId);
+        Task<bool> UpdateOrderAsync(Order orderToUpdate);
+
+        Task<bool> DeleteOrderAsync(Guid orderId);
     }
 }
