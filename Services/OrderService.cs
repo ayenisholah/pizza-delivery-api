@@ -24,6 +24,16 @@ namespace DeliveryAPI.Services
             }
         }
 
+        public bool DeleteOrder(Guid orderId)
+        {
+            var order = GetOrderById(orderId);
+
+            if (order == null) return false;
+
+            _orders.Remove(order);
+            return true;
+        }
+
         public List<Order> GetOrder()
         {
             return _orders;
