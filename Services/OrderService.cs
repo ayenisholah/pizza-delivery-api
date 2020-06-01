@@ -1,59 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using DeliveryAPI.Data;
 using DeliveryAPI.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryAPI.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly List<Order> _orders;
+        private readonly DataContext _dataContext;
 
-
-        public OrderService()
+        public OrderService(DataContext dataContext)
         {
-            _orders = new List<Order>();
-
-            for (var i = 0; i < 5; i++)
-            {
-                _orders.Add(new Order
-                {
-                    Id = Guid.NewGuid(),
-                    Amount = 9.99M
-                });
-            }
+            _dataContext = dataContext;
         }
 
-        public bool DeleteOrder(Guid orderId)
+        public async Task<bool> CreateOrderAsync(Order order)
         {
-            var order = GetOrderById(orderId);
+            await _dataContext.Orders.AddAsync(order);
+            var created = await _dataContext.SaveChangesAsync();
 
-            if (order == null) return false;
-
-            _orders.Remove(order);
-            return true;
+            return created > 0;
         }
 
-        public List<Order> GetOrder()
+        public async Task<List<Order>> GetOrdersAsync()
         {
-            return _orders;
+            return await _dataContext.Orders.ToListAsync();
         }
 
-        public Order GetOrderById(Guid orderId)
+        public async Task<Order> GetOrderByIdAsync(Guid orderId)
         {
-            return _orders.SingleOrDefault(x => x.Id == orderId);
+            return await _dataContext.Orders.SingleOrDefaultAsync(x => x.Id == orderId);
         }
 
-        public bool UpdateOrder(Order orderToUpdate)
+        public async Task<bool> UpdateOrderAsync(Order orderToUpdate)
         {
-            var orderExists = GetOrderById(orderToUpdate.Id) != null;
+            _dataContext.Orders.Update(orderToUpdate);
+            var updated = await _dataContext.SaveChangesAsync();
 
-            if (!orderExists) return false;
+            return updated > 0;
+        }
 
-            var index = _orders.FindIndex(x => x.Id == orderToUpdate.Id);
-            _orders[index] = orderToUpdate;
+        public async Task<bool> DeleteOrderAsync(Guid orderId)
+        {
+            var order = await GetOrderByIdAsync(orderId);
+            _dataContext.Orders.Remove(order);
 
-            return true;
+            var deleted = await _dataContext.SaveChangesAsync();
+
+            return deleted > 0;
         }
     }
 }
