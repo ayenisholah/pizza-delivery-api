@@ -3,8 +3,6 @@ namespace DeliveryAPI.Options
 {
     public class JwtSettings
     {
-        public JwtSettings()
-        {
-        }
+        public string Secret { get; set; }
     }
 }
