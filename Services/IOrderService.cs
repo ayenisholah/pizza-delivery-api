@@ -16,5 +16,6 @@ namespace DeliveryAPI.Services
         Task<bool> UpdateOrderAsync(Order orderToUpdate);
 
         Task<bool> DeleteOrderAsync(Guid orderId);
+        Task<bool> UserOwnsOrderAsync(Guid orderId, string v);
     }
 }
