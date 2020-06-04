@@ -33,5 +33,6 @@
     <Folder Include="Contracts\V1\Requests\" />
     <Folder Include="Contracts\V1\Responses\" />
     <Folder Include="Services\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
