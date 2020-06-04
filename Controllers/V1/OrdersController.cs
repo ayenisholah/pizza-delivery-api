@@ -6,6 +6,7 @@ using DeliveryAPI.Contracts;
 using DeliveryAPI.Contracts.V1.Requests;
 using DeliveryAPI.Contracts.V1.Responses;
 using DeliveryAPI.Domain;
+using DeliveryAPI.Extensions;
 using DeliveryAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,11 +35,15 @@ namespace DeliveryAPI.Controllers
         [HttpPut(ApiRoutes.Orders.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid orderId, [FromBody] UpdateOrderRequest request)
         {
-            var order = new Order
+            var userOwnsOrder = await _orderService.UserOwnsOrderAsync(orderId, HttpContext.GetUserId());
+
+            if (!userOwnsOrder)
             {
-                Id = orderId,
-                Amount = request.Amount
-            };
+                return BadRequest(new { error = "You do not own this order" });
+            }
+
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            order.Amount = request.Amount;
 
             var updated = await _orderService.UpdateOrderAsync(order);
 
@@ -60,7 +65,11 @@ namespace DeliveryAPI.Controllers
         [HttpPost(ApiRoutes.Orders.Create)]
         public async Task<IActionResult> Create([FromBody] CreateOrderRequest orderRequest)
         {
-            var order = new Order { Amount = orderRequest.Amount };
+            var order = new Order
+            {
+                Amount = orderRequest.Amount,
+                UserId = HttpContext.GetUserId()
+            };
 
             await _orderService.CreateOrderAsync(order);
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
@@ -73,6 +82,13 @@ namespace DeliveryAPI.Controllers
         [HttpDelete(ApiRoutes.Orders.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid orderId)
         {
+            var userOwnsOrder = await _orderService.UserOwnsOrderAsync(orderId, HttpContext.GetUserId());
+
+            if (!userOwnsOrder)
+            {
+                return BadRequest(new { error = "You do not own this order" });
+            }
+
             var deleted = await _orderService.DeleteOrderAsync(orderId);
 
             if (deleted) return NoContent();
