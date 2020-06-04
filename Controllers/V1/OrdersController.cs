@@ -7,10 +7,13 @@ using DeliveryAPI.Contracts.V1.Requests;
 using DeliveryAPI.Contracts.V1.Responses;
 using DeliveryAPI.Domain;
 using DeliveryAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryAPI.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
