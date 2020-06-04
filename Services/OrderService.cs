@@ -52,5 +52,22 @@ namespace DeliveryAPI.Services
 
             return deleted > 0;
         }
+
+        public async Task<bool> UserOwnsOrderAsync(Guid orderId, string userId)
+        {
+            var order = await _dataContext.Orders.AsNoTracking().SingleOrDefaultAsync(x => x.Id == orderId);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            if(order.UserId != userId)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

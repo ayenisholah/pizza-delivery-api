@@ -61,5 +61,10 @@ namespace DeliveryAPI.Services
             var response = await _cosmosStore.UpdateAsync(cosmosOrder);
             return response.IsSuccess;
         }
+
+        public Task<bool> UserOwnsOrderAsync(Guid orderId, string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
