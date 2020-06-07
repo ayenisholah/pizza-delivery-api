@@ -16,6 +16,7 @@ using DeliveryAPI.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using DeliveryAPI.Installers;
+using Microsoft.IdentityModel.Logging;
 
 namespace DeliveryAPI
 {
@@ -31,6 +32,8 @@ namespace DeliveryAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true; //To show detail of error and see the problem
+
             services.InstallServicesAssembly(Configuration);
         }
 
