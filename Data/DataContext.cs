@@ -16,6 +16,6 @@ namespace DeliveryAPI.Data
 
         public DbSet<Order> Orders { get; set; }
 
-
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
